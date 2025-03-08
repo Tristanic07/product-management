@@ -8,21 +8,22 @@ const app = express();
 
 app.use(express.json); // middle ware = allow us to Accept JSON data in the req.body
 
+
 app.post("/api/products", async (req,res) => {
     const product = req.body //user will send this data
 
     if(!product.name || !product.price || !product.image){
-        return req.status(400).json({success: false, message: "Please provide all fields."});
+        return res.status(400).json({success: false, message: "Please provide all fields."});
     }
 
     const newProduct = new Product(product);
 
     try{
         await newProduct.save();
-        return req.status(201).json({success: true, data: newProduct});
+        return res.status(201).json({success: true, data: newProduct});
     }catch(error){
         console.error(`Error in Create product : ${error.message}`);
-        return req.status(500).json({success: false, message: "Server error."});
+        return res.status(500).json({success: false, message: "Server error."});
     }
 })
 
