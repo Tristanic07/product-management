@@ -1,15 +1,16 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db.js';
+import Product from './models/product.model.js';
 
 dotenv.config();
 
 const app = express();
 
-app.use(express.json); // middle ware = allow us to Accept JSON data in the req.body
+app.use(express.json()); // middle ware = allow us to Accept JSON data in the req.body
 
 
-app.post("/api/products", async (req,res) => {
+app.post("/api/products", async (req, res) => {
     const product = req.body //user will send this data
 
     if(!product.name || !product.price || !product.image){
