@@ -1,8 +1,15 @@
-import { Button, Container, Flex, HStack, Text } from "@chakra-ui/react"
+import { Button, Container, Flex, HStack, Text} from "@chakra-ui/react"
+import { useColorMode, useColorModeValue } from "./ui/color-mode";
 import { Link } from "react-router-dom"
-import { CiSquarePlus } from "react-icons/ci";
+import { FaRegPlusSquare } from "react-icons/fa";
+import { LuSun } from "react-icons/lu";
+import { LuMoon } from "react-icons/lu";
 
 const Navbar = () => {
+    const { colorMode, toggleColorMode } = useColorMode()
+    const buttonBg = useColorModeValue("gray.100", "gray.800");
+    const buttonTextColor = useColorModeValue("black", "white");
+
   return (
     <Container maxW={"1140px"} px={4}>
         <Flex
@@ -25,13 +32,13 @@ const Navbar = () => {
 
             <HStack spacing={2} alignItems={"center"}>
                 <Link to={"/create"}>
-                    <Button>
-                        <CiSquarePlus fontSize={20} />
+                    <Button bg={buttonBg} color={buttonTextColor}>
+                        <FaRegPlusSquare />
                     </Button>
                 </Link>
 
-                <Button onClick={toggleColoreMode}>
-
+                <Button onClick={toggleColorMode} bg={buttonBg} color={buttonTextColor}>
+                {colorMode === "light" ? <LuSun /> : <LuMoon />}
                 </Button>
             </HStack>
         </Flex>
