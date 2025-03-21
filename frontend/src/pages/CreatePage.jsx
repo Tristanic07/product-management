@@ -1,6 +1,8 @@
-import { Container, VStack, Heading, Box, Input, Button } from "@chakra-ui/react"
+import { Container, VStack, Heading, Box, Input, Button} from "@chakra-ui/react"
 import { useState } from "react"
 import { useColorModeValue } from "../components/ui/color-mode"
+import { userProductStore } from "../store/product"
+import {Toaster, toaster } from "../components/ui/toaster"
 
 const CreatePage = () => {
   const [newProduct, setNewProduct] = useState({
@@ -9,20 +11,46 @@ const CreatePage = () => {
     image: ""
   })
 
-  const handleAddProduct = () => {
-    console.log(newProduct);
+  const {createProduct}=userProductStore();
+  
+  const handleAddProduct = async() => {
+    const {success, message} = await createProduct(newProduct);
+    console.log(success);
+    if(!success){
+      toaster.error({
+        title: "Error",
+        description: message,
+        status: "error",
+        duration: 2000,
+        action: {
+          label: "x"
+        }
+      });
+    }else{
+      toaster.success({
+        title: "Success",
+        description: message,
+        status: "succes",
+        duration: 2000,
+        action: {
+          label: "✓"
+        }
+      });
+    }
+    setNewProduct({name: "", price: "", image: ""});
   } 
 
   return (
     <Container maxW={"40rem"}>
+    <Toaster />
       <VStack
         spacing={8}
       >
-        <Heading as={"h1"} size={'2xl'} textAlign={'center'} mb={8}>Create New Product</Heading>
+        <Heading as={"h1"} fontWeight={"bold"} size={'2xl'} textAlign={'center'} mb={8}>Create New Product</Heading>
 
         <Box 
           w={"full"}
-          bg={useColorModeValue("white", "#1B2536")}
+          bg={useColorModeValue("white", "#1A2230")}
           p={6}
           rounded={"lg"}
           shadow={"md"}
@@ -50,7 +78,7 @@ const CreatePage = () => {
               onChange={(e) => setNewProduct({...newProduct, image: e.target.value})}
             />
 
-            <Button colorPalette="blue" onClick={handleAddProduct}>Add Product</Button>
+            <Button colorPalette="cyan" onClick={handleAddProduct}>Add Product</Button>
           </VStack>
         </Box>
       </VStack>
