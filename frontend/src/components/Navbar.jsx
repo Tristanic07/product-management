@@ -7,11 +7,12 @@ import { LuMoon } from "react-icons/lu";
 
 const Navbar = () => {
     const { colorMode, toggleColorMode } = useColorMode()
-    const buttonBg = useColorModeValue("gray.200", "#1A2230");
+    const buttonBg = useColorModeValue("gray.100", "#2E3A50");
     const buttonTextColor = useColorModeValue("black", "white");
 
   return (
     <Container maxW={"1140px"} px={4}>
+
         <Flex
             h={16}
             alignItems={"center"}
