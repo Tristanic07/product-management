@@ -8,7 +8,11 @@ export const userProductStore = create((set) => ({
             return {success: false, message: "Please fill all fields."};
         }
 
-        const res = await fetch("/api/products", {
+        if(isNaN(newProduct.price)){
+            return {success: false, message: "Price should be a Number."};
+        }
+
+        const res = await fetch("api/products", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json" 
@@ -17,13 +21,36 @@ export const userProductStore = create((set) => ({
         })
 
         const data = await res.json();
-        set((state) => ({products: [...state.products, data.data]}))
+        
+        if(data.succes){
+            set((state) => ({products: [...state.products, data.data]}))
+        }
 
-        return {success: true, message: "Product created successfully."};
+        return {success: true, message: "Product added successfully."};
     },
     fetchProducts: async() => {
-        const res = await fetch("/api/products")
+        try {
+            const res = await fetch("/api/products")
+
+            console.log(res);
+            const data = await res.json();
+            console.log(data);
+            set({products: data.data});
+        } catch (error) {
+            console.error(error);
+        }
+        
+    },
+    deleteProduct: async (pid) => {
+        const res = await fetch(`/api/products/${pid}`, {
+            method: "DELETE",
+        });
+
         const data = await res.json();
-        set({products: data.data});
+        console.log(data);
+        if(!data.success) return {success: false, message: data.message};
+
+        set(state => ({products: state.products.filter(product => product._id !== pid)}));
+        return {success: true, message: data.message};
     }
 }))

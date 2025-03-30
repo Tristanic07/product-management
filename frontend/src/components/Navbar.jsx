@@ -8,7 +8,7 @@ import { LuMoon } from "react-icons/lu";
 const Navbar = () => {
     const { colorMode, toggleColorMode } = useColorMode()
     const buttonBg = useColorModeValue("gray.100", "#2E3A50");
-    const buttonTextColor = useColorModeValue("black", "white");
+    const buttonTextColor = useColorModeValue("gray.800", "white");
 
   return (
     <Container maxW={"1140px"} px={4}>

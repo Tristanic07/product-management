@@ -12,10 +12,8 @@ const HomePage = () => {
     fetchProducts();
   }, [fetchProducts]);
 
-  console.log(products);
-
   return (
-    <Container maxW="container.xl" py={12}>
+    <Container maxW="container.xl" p={16}>
       <VStack gap={8}>
         <Text
           fontSize={{ base: 21, sm: 27 }}
@@ -27,7 +25,7 @@ const HomePage = () => {
         >
           Current Product 🚀
         </Text>
-        { products ?
+        {products ?
           (
             <SimpleGrid 
             columns={[1, 2, 3]}

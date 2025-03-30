@@ -15,7 +15,7 @@ const CreatePage = () => {
   
   const handleAddProduct = async() => {
     const {success, message} = await createProduct(newProduct);
-    console.log(success);
+    
     if(!success){
       toaster.error({
         title: "Error",
@@ -30,14 +30,15 @@ const CreatePage = () => {
       toaster.success({
         title: "Success",
         description: message,
-        status: "succes",
+        status: "success",
         duration: 2000,
         action: {
           label: "✓"
         }
       });
+
+      setNewProduct({name: "", price: "", image: ""});
     }
-    setNewProduct({name: "", price: "", image: ""});
   } 
 
   return (
