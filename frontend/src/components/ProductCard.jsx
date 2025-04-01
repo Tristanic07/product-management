@@ -89,7 +89,7 @@ const ProductCard = ({ product }) => {
       transition={"all 0.3s"}
       bg={bgColor}
       _hover={{ transform: "translate(0, -5px)", shadow: "xl" }}
-      minWidth={"30rem"}
+      minWidth={"20rem"}
     >
       <Toaster />
       <Image
