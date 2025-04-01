@@ -10,18 +10,23 @@ import {
   Dialog,
   Portal,
   VStack,
+  Input,
 } from "@chakra-ui/react";
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import { useColorModeValue } from "./ui/color-mode";
 import { userProductStore } from "../store/product";
 import { Toaster, toaster } from "../components/ui/toaster";
+import { useState } from "react";
 
 const ProductCard = ({ product }) => {
   const buttonTextColor = useColorModeValue("gray.600", "white");
   const bgColor = useColorModeValue("gray.100", "#1A2230");
+  const [open, setOpen] = useState(false);
+  const [updatedProduct, setUpdatedProduct] = useState(product);
 
-  const { deleteProduct } = userProductStore();
+  const { deleteProduct, updateProduct } = userProductStore();
+
   const handleDeleteProduct = async (pid) => {
     const { success, message } = await deleteProduct(pid);
 
@@ -45,6 +50,34 @@ const ProductCard = ({ product }) => {
           label: "✓",
         },
       });
+    }
+  };
+
+  const handleUpdateProduct = async (pid, updatedProduct) => {
+    const { success, message } = await updateProduct(pid, updatedProduct);
+
+    if (!success) {
+      toaster.error({
+        title: "Error",
+        description: message,
+        status: "error",
+        duration: 2000,
+        action: {
+          label: "x",
+        },
+      });
+    } else {
+      toaster.success({
+        title: "Success",
+        description: message,
+        status: "success",
+        duration: 2000,
+        action: {
+          label: "✓",
+        },
+      });
+
+      setOpen(!open);
     }
   };
 
@@ -73,7 +106,7 @@ const ProductCard = ({ product }) => {
           ₱{product.price}
         </Text>
         <HStack gap={2}>
-          <IconButton colorPalette={"blue"}>
+          <IconButton colorPalette={"blue"} onClick={() => setOpen(!open)}>
             <FaEdit />
           </IconButton>
           <IconButton
@@ -84,13 +117,13 @@ const ProductCard = ({ product }) => {
           </IconButton>
         </HStack>
       </Box>
-      <Dialog.Root>
+      <Dialog.Root lazyMount open={open} onOpenChange={(e) => setOpen(e.open)}>
         <Portal>
           <Dialog.Backdrop />
           <Dialog.Positioner>
-            <Dialog.Content>
+            <Dialog.Content bg={bgColor}>
               <Dialog.Header>
-                <Dialog.Title>Dialog Title</Dialog.Title>
+                <Dialog.Title>Update Product</Dialog.Title>
               </Dialog.Header>
               <Dialog.Body>
                 <VStack spacing={4}>
@@ -136,7 +169,14 @@ const ProductCard = ({ product }) => {
                 <Dialog.ActionTrigger asChild>
                   <Button variant="outline">Cancel</Button>
                 </Dialog.ActionTrigger>
-                <Button>Save</Button>
+                <Button
+                  colorPalette={"cyan"}
+                  onClick={() =>
+                    handleUpdateProduct(product._id, updatedProduct)
+                  }
+                >
+                  Update
+                </Button>
               </Dialog.Footer>
               <Dialog.CloseTrigger asChild>
                 <CloseButton size="sm" />
